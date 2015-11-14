@@ -1,4 +1,4 @@
-define(['phaser', 'Preloader', 'Game'], function (Phaser, Preloader, Game) {
+define(['phaser', 'Preloader', 'Menu', 'Game', 'GameOver'], function (Phaser, Preloader, Menu, Game, GameOver) {
     'use strict';
 
     function Boot (game) {
@@ -15,7 +15,9 @@ define(['phaser', 'Preloader', 'Game'], function (Phaser, Preloader, Game) {
     
     Boot.prototype.create = function () {
         this.game.state.add('Preloader', Preloader);
+	    this.game.state.add('Menu', Menu);
         this.game.state.add('Game', Game);
+	    this.game.state.add('GameOver', GameOver);
         this.game.state.start('Preloader');
     };
 
