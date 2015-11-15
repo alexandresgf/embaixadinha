@@ -8,7 +8,10 @@
         BroFist Team
     </author>
     <content src="index.html" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="Orientation" value="portrait" />
     <plugin name="cordova-plugin-whitelist" version="1" />
+    <plugin name="Accelerometer" value="org.apache.cordova.AccelListener" />
     <access origin="*" />
     <allow-navigation href="http://*/*" />
     <allow-intent href="http://*/*" />

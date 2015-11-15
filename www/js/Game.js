@@ -1,6 +1,8 @@
 define(['phaser'], function (Phaser) {
 	'use strict';
 
+	var global_ball;
+
 	function Game (game) {
         // the ball
 		this._ball = null;
@@ -24,11 +26,21 @@ define(['phaser'], function (Phaser) {
     Game.prototype.constructor = Game;
 
     Game.prototype.create = function () {
+	    // AdMob
+	    if (AdMob)
+		    AdMob.createBanner({
+			    adId: 'ca-app-pub-8801691334215483/6136203255',
+			    position: AdMob.AD_POSITION.BOTTOM_CENTER,
+			    autoShow: true,
+			    isTesting: true,
+			    overlap: true
+		    });
+
 	    // start arcade physics
 	    this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	    // set gravity on y-axis
-	    this.game.physics.arcade.gravity.y = 950;
+	    this.game.physics.arcade.gravity.y = 981;
 
 	    // add backscreen color
 	    this.game.stage.backgroundColor = '#54992e';
@@ -45,9 +57,23 @@ define(['phaser'], function (Phaser) {
 	    this._ball.anchor.set(0.5);
 	    this._ball.inputEnabled = true;
 	    this._ball.events.onInputDown.add(this.kickUp, this);
+	    global_ball = this._ball;
 
 	    // add physics to the ball
 	    this.game.physics.enable(this._ball, Phaser.Physics.ARCADE);
+
+	    // setup accelerometer
+	    this._watchAccID = navigator.accelerometer.watchAcceleration(
+			    function (acceleration) {
+				    global_ball.body.acceleration.x += acceleration.x * -1;
+			    },
+
+			    function () {
+				    throw '[ERROR] Can\'t get acceleration values.';
+			    },
+
+			    { frequency: 1 }
+	    );
 
 	    // add timer title
 	    var label = '00:00:00';
@@ -63,22 +89,19 @@ define(['phaser'], function (Phaser) {
 	    // start the game
 	    this._sfxWhistle.play();
 	    this.game.add.tween(this._ball.body.velocity).to({ y: -900 }, 100, Phaser.Easing.Linear.None, true);
-
-	    // AdMob
-	    if (AdMob)
-		    AdMob.createBanner({
-			    adId: 'ca-app-pub-8801691334215483/6136203255',
-			    position: AdMob.AD_POSITION.BOTTOM_CENTER,
-			    autoShow: true,
-			    isTesting: true,
-			    overlap: true
-		    });
     };
 
 	Game.prototype.update = function () {
+		// show if the ball is ready to kick
+		if (this.game.time.now > this._kickTimer)
+			this._ball.tint = 0x00ff00;
+		else
+			this._ball.tint = 0xffffff;
+
 		// game over
 		if (this._ball.body.y > this.game.camera.height) {
 			this.game.time.events.removeAll();
+			navigator.accelerometer.clearWatch(this._watchAccID);
 			this.save();
 			this.game.state.start('GameOver');
 		}
@@ -88,7 +111,7 @@ define(['phaser'], function (Phaser) {
 		if (this.game.time.now > this._kickTimer) {
 			this._sfxKick.play();
 			this._ball.body.velocity.y = -500;
-			this._kickTimer = this.game.time.now + 1000;
+			this._kickTimer = this.game.time.now + 500;
 		}
 	};
 
