@@ -51,14 +51,29 @@ define(['phaser'], function (Phaser) {
 	};
 
 	GameOver.prototype.newGame = function () {
+		if (localStorage.newGameCount) {
+			localStorage.newGameCount = Number(localStorage.newGameCount) + 1;
+
+			if (localStorage.newGameCount == 3) {
+				localStorage.newGameCount = 0;
+				localStorage.quit = 0;
+				this.game.state.start('Ads');
+
+				return;
+			}
+		} else {
+			localStorage.newGameCount = 1;
+		}
+
 		this.game.state.start('Game');
 	};
 
 	GameOver.prototype.exit = function () {
 		if (AdMob)
-			AdMob.removeBanner();
+			AdMob.hideBanner();
 
-		this.game.state.start('Menu');
+		localStorage.quit = 1;
+		this.game.state.start('Ads');
 	};
 
 	return GameOver;

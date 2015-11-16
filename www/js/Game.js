@@ -26,15 +26,9 @@ define(['phaser'], function (Phaser) {
     Game.prototype.constructor = Game;
 
     Game.prototype.create = function () {
-	    // AdMob
+	    // show admob
 	    if (AdMob)
-		    AdMob.createBanner({
-			    adId: 'ca-app-pub-8801691334215483/6136203255',
-			    position: AdMob.AD_POSITION.BOTTOM_CENTER,
-			    autoShow: true,
-			    isTesting: true,
-			    overlap: true
-		    });
+	        AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
 
 	    // start arcade physics
 	    this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -72,7 +66,7 @@ define(['phaser'], function (Phaser) {
 				    throw '[ERROR] Can\'t get acceleration values.';
 			    },
 
-			    { frequency: 1 }
+			    { frequency: 50 }
 	    );
 
 	    // add timer title
