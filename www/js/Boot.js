@@ -14,17 +14,20 @@ define(['phaser', 'Preloader', 'Menu', 'Game', 'GameOver', 'Ads'], function (Pha
     };
     
     Boot.prototype.create = function () {
+	    // start analytics
+	    analytics.startTrackerWithId('UA-70227806-2');
+
 	    // start admob
 	    if (AdMob) {
 		    AdMob.createBanner({
-			    adId: 'ca-app-pub-6827992750433454/4589489121',
+			    adId: 'ca-app-pub-7403543083567100/2876399875',
 			    autoShow: false,
 			    isTesting: true,
 			    overlap: true
 		    });
 
 		    AdMob.prepareInterstitial({
-			    adId: 'ca-app-pub-6827992750433454/7542955524',
+			    adId: 'ca-app-pub-7403543083567100/4353133078',
 			    autoShow: false,
 			    isTesting: true,
 			    overlap: true
