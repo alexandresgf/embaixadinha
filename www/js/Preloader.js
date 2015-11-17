@@ -11,6 +11,8 @@ define(['phaser'], function (Phaser) {
 	    // load audio
 	    this.load.audio('sfx_kick', 'assets/kick.ogg');
 	    this.load.audio('sfx_whistle', 'assets/whistle.ogg');
+	    this.load.audio('sfx_ahh', 'assets/ahh.ogg');
+	    this.load.audio('sfx_celebration', 'assets/celebration.ogg');
 
         // load images
         this.load.image('bg', 'assets/bg.png');

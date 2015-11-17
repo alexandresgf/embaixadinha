@@ -16,11 +16,23 @@ define(['phaser'], function (Phaser) {
 		// current time (sec)
 		this._timerCurr = 0;
 
+		// current record
+		this._record = localStorage.getItem('record') || 0;
+
+		// new record flag
+		this._isNewRecord = false;
+
 		// sfx kick
 		this._sfxKick = null;
 
 		// sfx whistle
 		this._sfxWhistle = null;
+
+		// sfx lose ball
+		this._sfxAhh = null;
+
+		// sfx new record
+		this._sfxCelebration = null;
     }
 
     Game.prototype.constructor = Game;
@@ -45,6 +57,8 @@ define(['phaser'], function (Phaser) {
 	    // add sound effects
 	    this._sfxWhistle = this.game.add.audio('sfx_whistle');
 	    this._sfxKick = this.game.add.audio('sfx_kick');
+	    this._sfxAhh = this.game.add.audio('sfx_ahh');
+	    this._sfxCelebration = this.game.add.audio('sfx_celebration');
 
 	    // setup the ball
 	    this._ball = this.game.add.sprite(this.game.camera.width / 2, this.game.camera.height, 'ball');
@@ -94,6 +108,7 @@ define(['phaser'], function (Phaser) {
 
 		// game over
 		if (this._ball.body.y > this.game.camera.height) {
+			this._sfxAhh.play();
 			this.game.time.events.removeAll();
 			navigator.accelerometer.clearWatch(this._watchAccID);
 			this.save();
@@ -124,17 +139,22 @@ define(['phaser'], function (Phaser) {
 		if (seconds < 10)
 			seconds = '0' + seconds;
 
+		if (sec_num > this._record && !this._isNewRecord && this._record !== 0) {
+			this._sfxCelebration.play();
+			this._isNewRecord = true;
+		}
+
 		this._timerTitle.setText(hours + ':' + minutes + ':' + seconds);
 	};
 
 	Game.prototype.save = function () {
-		var record = localStorage.getItem('record');
-
-		if (record === null || this._timerCurr > record)
-			record = this._timerCurr;
+		if (this._timerCurr > this._record) {
+			this._record = this._timerCurr;
+			this._isNewRecord = false;
+		}
 
 		this._timerCurr = 0;
-		localStorage.setItem('record', record);
+		localStorage.setItem('record', this._record);
 	};
 
     return Game;
