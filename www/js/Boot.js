@@ -2,7 +2,7 @@ define(['phaser', 'Preloader', 'Menu', 'Game', 'GameOver', 'Ads'], function (Pha
     'use strict';
 
     function Boot (game) {
-        // code me!
+        // use init method!
     }
 
     Boot.prototype.constructor = Boot;
@@ -15,21 +15,21 @@ define(['phaser', 'Preloader', 'Menu', 'Game', 'GameOver', 'Ads'], function (Pha
     
     Boot.prototype.create = function () {
 	    // start analytics
-	    analytics.startTrackerWithId('UA-70227806-2');
+	    window.analytics.startTrackerWithId('UA-70227806-2');
 
 	    // start admob
 	    if (AdMob) {
 		    AdMob.createBanner({
 			    adId: 'ca-app-pub-7403543083567100/2876399875',
 			    autoShow: false,
-			    isTesting: true,
+			    isTesting: false,
 			    overlap: true
 		    });
 
 		    AdMob.prepareInterstitial({
 			    adId: 'ca-app-pub-7403543083567100/4353133078',
 			    autoShow: false,
-			    isTesting: true,
+			    isTesting: false,
 			    overlap: true
 		    });
 	    }

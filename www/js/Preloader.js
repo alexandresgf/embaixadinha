@@ -2,7 +2,7 @@ define(['phaser'], function (Phaser) {
     'use strict';
     
     function Preloader (game) {
-        // code me!
+        // use init method!
     }
     
     Preloader.prototype.constructor = Preloader;

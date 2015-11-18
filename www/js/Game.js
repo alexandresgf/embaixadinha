@@ -4,7 +4,20 @@ define(['phaser'], function (Phaser) {
 	var global_ball;
 
 	function Game (game) {
-        // the ball
+        // use init method!
+    }
+
+    Game.prototype.constructor = Game;
+
+	Game.prototype.init = function () {
+		// google analytics track game screen
+		window.analytics.trackView('Game Screen');
+
+		// show admob
+		if (AdMob)
+			AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
+
+		// the ball
 		this._ball = null;
 
 		// kick timer
@@ -33,15 +46,9 @@ define(['phaser'], function (Phaser) {
 
 		// sfx new record
 		this._sfxCelebration = null;
-    }
-
-    Game.prototype.constructor = Game;
+	};
 
     Game.prototype.create = function () {
-	    // show admob
-	    if (AdMob)
-	        AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
-
 	    // start arcade physics
 	    this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -73,14 +80,14 @@ define(['phaser'], function (Phaser) {
 	    // setup accelerometer
 	    this._watchAccID = navigator.accelerometer.watchAcceleration(
 			    function (acceleration) {
-				    global_ball.body.acceleration.x += acceleration.x * -1;
+				    global_ball.body.velocity.x += acceleration.x * -1;
 			    },
 
 			    function () {
 				    throw '[ERROR] Can\'t get acceleration values.';
 			    },
 
-			    { frequency: 50 }
+			    { frequency: 10 }
 	    );
 
 	    // add timer title
@@ -120,7 +127,7 @@ define(['phaser'], function (Phaser) {
 		if (this.game.time.now > this._kickTimer) {
 			this._sfxKick.play();
 			this._ball.body.velocity.y = -500;
-			this._kickTimer = this.game.time.now + 500;
+			this._kickTimer = this.game.time.now + 850;
 		}
 	};
 

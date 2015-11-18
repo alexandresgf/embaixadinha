@@ -1,17 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.brofistcorp.embaixadinha" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.brofistcorp.embaixadinha" version="1.2.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Embaixadinha</name>
     <description>
         A TAP game that you have to keep the ball in the air.
     </description>
-    <author email="contact@brofistcorp.com" href="http://brofistcorp.com">
-        BroFist Team
+    <author email="brofistoficial@gmail.com" href="http://facebook.com/brofistcorp">
+        BroFist Corp
     </author>
     <content src="index.html" />
     <preference name="Fullscreen" value="true" />
     <preference name="Orientation" value="portrait" />
     <plugin name="cordova-plugin-whitelist" version="1" />
     <plugin name="Accelerometer" value="org.apache.cordova.AccelListener" />
+    <plugin name="NetworkStatus" value="org.apache.cordova.NetworkManager" />
     <access origin="*" />
     <allow-navigation href="http://*/*" />
     <allow-intent href="http://*/*" />

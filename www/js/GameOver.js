@@ -2,7 +2,7 @@ define(['phaser'], function (Phaser) {
 	'use strict';
 
 	function GameOver (game) {
-		// code me!
+		// use init method!
 	}
 
 	GameOver.prototype.constructor = GameOver;
@@ -55,6 +55,9 @@ define(['phaser'], function (Phaser) {
 			localStorage.newGameCount = Number(localStorage.newGameCount) + 1;
 
 			if (localStorage.newGameCount == 3) {
+				if (AdMob)
+					AdMob.hideBanner();
+
 				localStorage.newGameCount = 0;
 				localStorage.quit = 0;
 				this.game.state.start('Ads');
