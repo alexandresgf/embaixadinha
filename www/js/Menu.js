@@ -17,19 +17,19 @@ define(['phaser'], function (Phaser) {
 		// add foreground
 		this.game.add.sprite(0, 0, 'fg_menu');
 
-		// add text label
-		var label = 'TAP para começar';
-		var labelConf = { font: '30px Lucida Console', fill: '#fff', align: 'center' };
-		this._label = this.game.add.text(this.game.camera.width / 2, this.game.camera.height - 200, label, labelConf);
-		this._label.anchor.set(0.5);
+		// add buttons
+		this._btnNewGame = this.game.add.button(this.game.camera.width / 2, this.game.camera.height / 2 + 150, 'btn_play', this.play, this);
+		this._btnExit = this.game.add.button(this.game.camera.width / 2, this.game.camera.height / 2 + 250, 'btn_help', this.help, this);
+		this._btnNewGame.anchor.set(0.5);
+		this._btnExit.anchor.set(0.5);
+	};
 
-		// add the blinking text
-		this.game.add.tween(this._label).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true, 0, 500, true);
+	Menu.prototype.play = function () {
+		this.game.state.start('Game');
+	};
 
-		// tap to start
-		this.input.onTap.add(function () {
-			this.game.state.start('Game');
-		}, this);
+	Menu.prototype.help = function () {
+		this.game.state.start('Help');
 	};
 
 	return Menu;

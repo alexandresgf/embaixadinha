@@ -21,6 +21,11 @@ define(['phaser'], function (Phaser) {
 	    this.load.image('fg_black', 'assets/fg_black.png');
 	    this.load.image('btn_newgame', 'assets/btn_newgame.png');
 	    this.load.image('btn_exit', 'assets/btn_exit.png');
+        this.load.image('btn_play', 'assets/btn_play.png');
+        this.load.image('btn_help', 'assets/btn_help.png');
+	    this.load.image('btn_help', 'assets/btn_help.png');
+	    this.load.image('how_to_p01', 'assets/how_to_p01.png');
+	    this.load.image('how_to_p02', 'assets/how_to_p02.png');
     };
     
     Preloader.prototype.create = function () {

@@ -4,26 +4,30 @@ define(['phaser'], function (Phaser) {
 	function Ads (game) {
 		// listen when ad is closed
 		document.addEventListener('onAdDismiss', function (data) {
-			if (localStorage.quit == 0)
-				game.state.start('Game');
-			else if (localStorage.quit == 1)
+			var quit = Number(localStorage.getItem('quit'));
+
+			if (quit)
 				game.state.start('Menu');
+			else
+				game.state.start('Game');
 		});
 	}
 
 	Ads.prototype.constructor = Ads;
 
 	Ads.prototype.create = function () {
+		var quit = Number(localStorage.getItem('quit'));
+
 		// set backscreen color
 		this.game.stage.backgroundColor = '#000';
 
 		// start admob
 		if (AdMob && navigator.connection.type !== Connection.NONE)
 			AdMob.showInterstitial();
-		else if (localStorage.quit == 0)
-			this.game.state.start('Game');
-		else if (localStorage.quit == 1)
+		else if (quit)
 			this.game.state.start('Menu');
+		else
+			this.game.state.start('Game');
 	};
 
 	return Ads;

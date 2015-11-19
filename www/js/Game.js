@@ -11,11 +11,7 @@ define(['phaser'], function (Phaser) {
 
 	Game.prototype.init = function () {
 		// google analytics track game screen
-		window.analytics.trackView('Game Screen');
-
-		// show admob
-		if (AdMob)
-			AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
+		window.analytics.trackView('Embaixadinha - Game Screen');
 
 		// the ball
 		this._ball = null;
@@ -126,8 +122,16 @@ define(['phaser'], function (Phaser) {
 	Game.prototype.kickUp = function () {
 		if (this.game.time.now > this._kickTimer) {
 			this._sfxKick.play();
+
+			if (this.game.input.x > this._ball.x - 30 && this.game.input.x < this._ball.x + 30)
+				this._ball.body.velocity.x = 0;
+			else if (this.game.input.x > this._ball.x)
+				this._ball.body.velocity.x -= 250;
+			else if (this.game.input.x < this._ball.x)
+				this._ball.body.velocity.x += 250;
+
 			this._ball.body.velocity.y = -500;
-			this._kickTimer = this.game.time.now + 850;
+			this._kickTimer = this.game.time.now + 500;
 		}
 	};
 

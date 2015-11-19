@@ -51,31 +51,22 @@ define(['phaser'], function (Phaser) {
 	};
 
 	GameOver.prototype.newGame = function () {
-		if (localStorage.newGameCount) {
-			localStorage.newGameCount = Number(localStorage.newGameCount) + 1;
+		var showAdsCounter = Number(localStorage.getItem('showAdsCounter'));
+		var newGameCounter = Number(localStorage.getItem('newGameCounter'));
 
-			if (localStorage.newGameCount == 3) {
-				if (AdMob)
-					AdMob.hideBanner();
-
-				localStorage.newGameCount = 0;
-				localStorage.quit = 0;
-				this.game.state.start('Ads');
-
-				return;
-			}
+		if (newGameCounter === showAdsCounter) {
+			localStorage.setItem('quit', 0);
+			localStorage.setItem('showAdsCounter', this.game.rnd.integerInRange(1, 3));
+			localStorage.setItem('newGameCounter', 0);
+			this.game.state.start('Ads');
 		} else {
-			localStorage.newGameCount = 1;
+			localStorage.setItem('newGameCounter', ++newGameCounter);
+			this.game.state.start('Game');
 		}
-
-		this.game.state.start('Game');
 	};
 
 	GameOver.prototype.exit = function () {
-		if (AdMob)
-			AdMob.hideBanner();
-
-		localStorage.quit = 1;
+		localStorage.setItem('quit', 1);
 		this.game.state.start('Ads');
 	};
 
