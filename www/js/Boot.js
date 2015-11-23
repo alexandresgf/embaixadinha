@@ -24,7 +24,7 @@ define(['phaser', 'Preloader', 'Menu', 'Help', 'Game', 'GameOver', 'Ads'], funct
 					        case 2:
 						        bootUp.voted = true;
 						        window.open(
-								        'https://play.google.com/store/apps/details?id=br.com.brofistcorp.embaixadinha',
+								        'https://play.google.com/store/apps/details?id=com.brofistcorp.embaixadinha',
 								        '_system'
 						        );
 						        break;
