@@ -8,6 +8,46 @@ define(['phaser', 'Preloader', 'Menu', 'Help', 'Game', 'GameOver', 'Ads'], funct
     Boot.prototype.constructor = Boot;
 
     Boot.prototype.init = function () {
+	    // verify votes
+	    var bootUp = JSON.parse(localStorage.getItem('bootUp')) || { openCount: 1, voted: false };
+
+        if ((bootUp.openCount === 2 || !(bootUp.openCount % 5)) && !bootUp.voted) {
+	        navigator.notification.confirm(
+			        'Gostaria de avaliar o nosso jogo?!',
+
+			        function (index) {
+				        switch (index) {
+					        case 1:
+						        bootUp.openCount++;
+						        break;
+
+					        case 2:
+						        bootUp.voted = true;
+						        window.open(
+								        'https://play.google.com/store/apps/details?id=br.com.brofistcorp.embaixadinha',
+								        '_system'
+						        );
+						        break;
+
+					        case 3:
+						        bootUp.voted = true;
+						        break;
+
+				        }
+
+				        localStorage.setItem('bootUp', JSON.stringify(bootUp));
+			        },
+
+			        'VOTE!',
+
+			        ['Depois', 'Votar!', 'Não']
+	        );
+        } else {
+	        bootUp.openCount++;
+	        localStorage.setItem('bootUp', JSON.stringify(bootUp));
+        }
+
+	    // setup phaser screen
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;

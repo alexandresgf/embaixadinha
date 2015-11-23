@@ -19,6 +19,9 @@ define(['phaser'], function (Phaser) {
 		// kick timer
 		this._kickTimer = 0;
 
+		// kick power
+		this._kickPow = 300;
+
 		// string timer
 		this._timerTitle = null;
 
@@ -49,7 +52,7 @@ define(['phaser'], function (Phaser) {
 	    this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	    // set gravity on y-axis
-	    this.game.physics.arcade.gravity.y = 981;
+	    this.game.physics.arcade.gravity.y = 950;
 
 	    // add backscreen color
 	    this.game.stage.backgroundColor = '#54992e';
@@ -63,39 +66,42 @@ define(['phaser'], function (Phaser) {
 	    this._sfxAhh = this.game.add.audio('sfx_ahh');
 	    this._sfxCelebration = this.game.add.audio('sfx_celebration');
 
-	    // setup the ball
-	    this._ball = this.game.add.sprite(this.game.camera.width / 2, this.game.camera.height, 'ball');
+	    // create ball
+	    this._ball = this.game.add.sprite(this.game.width / 2, this.game.height, 'ball');
+
+	    // add physics to the ball
+	    this.game.physics.enable(this._ball, Phaser.Physics.ARCADE);
+
+	    // setup ball
 	    this._ball.anchor.set(0.5);
 	    this._ball.inputEnabled = true;
 	    this._ball.events.onInputDown.add(this.kickUp, this);
 	    global_ball = this._ball;
 
-	    // add physics to the ball
-	    this.game.physics.enable(this._ball, Phaser.Physics.ARCADE);
-
 	    // setup accelerometer
 	    this._watchAccID = navigator.accelerometer.watchAcceleration(
 			    function (acceleration) {
-				    global_ball.body.velocity.x += acceleration.x * -1;
+				    global_ball.body.velocity.x += acceleration.x * -3;
 			    },
 
 			    function () {
 				    throw '[ERROR] Can\'t get acceleration values.';
 			    },
 
-			    { frequency: 10 }
+			    { frequency: 5 }
 	    );
 
 	    // add timer title
 	    var label = '00:00:00';
 	    var labelConf = { font: '60px Lucida Console', fill: '#fff', align: 'center' };
 	    this._timerTitle = this.game.add.text(0, 0, label, labelConf);
-	    this._timerTitle.x = this.game.camera.width / 2;
+	    this._timerTitle.x = this.game.width / 2;
 	    this._timerTitle.y = this._timerTitle.height / 2 + 10;
 	    this._timerTitle.anchor.set(0.5);
 
-	    // add timer
+	    // add timer events
 	    this.game.time.events.loop(Phaser.Timer.SECOND, this.toHHMMSS, this);
+	    this.game.time.events.loop(Phaser.Timer.SECOND * 10, this.updatePower, this);
 
 	    // start the game
 	    this._sfxWhistle.play();
@@ -110,7 +116,7 @@ define(['phaser'], function (Phaser) {
 			this._ball.tint = 0xffffff;
 
 		// game over
-		if (this._ball.body.y > this.game.camera.height) {
+		if (this._ball.body.y > this.game.height) {
 			this._sfxAhh.play();
 			this.game.time.events.removeAll();
 			navigator.accelerometer.clearWatch(this._watchAccID);
@@ -123,16 +129,18 @@ define(['phaser'], function (Phaser) {
 		if (this.game.time.now > this._kickTimer) {
 			this._sfxKick.play();
 
-			if (this.game.input.x > this._ball.x - 30 && this.game.input.x < this._ball.x + 30)
-				this._ball.body.velocity.x = 0;
+			if (this.game.input.x < this._ball.x)
+				this._ball.body.velocity.x += this._kickPow;
 			else if (this.game.input.x > this._ball.x)
-				this._ball.body.velocity.x -= 250;
-			else if (this.game.input.x < this._ball.x)
-				this._ball.body.velocity.x += 250;
+				this._ball.body.velocity.x -= this._kickPow;
 
 			this._ball.body.velocity.y = -500;
 			this._kickTimer = this.game.time.now + 500;
 		}
+	};
+
+	Game.prototype.updatePower = function () {
+		this._kickPow += 25;
 	};
 
 	Game.prototype.toHHMMSS = function () {
